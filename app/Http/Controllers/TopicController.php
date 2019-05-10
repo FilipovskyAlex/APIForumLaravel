@@ -19,7 +19,7 @@ class TopicController extends Controller
      * Get paginate list of all topics
      * @return array
      */
-    public function index()
+    public function index() : array
     {
         $topics = Topic::newestFirst()->paginate(2);
         $topicsCollection = $topics->getCollection();
@@ -29,6 +29,19 @@ class TopicController extends Controller
             ->parseIncludes(['user'])
             ->transformWith(new TopicTransformer)
             ->paginateWith(new IlluminatePaginatorAdapter($topics))
+            ->toArray();
+    }
+
+    /**
+     * @param Topic $topic
+     * @return array
+     */
+    public function show(Topic $topic) : array
+    {
+        return fractal()
+            ->item($topic)
+            ->parseIncludes(['user', 'posts', 'posts.user'])
+            ->transformWith(new TopicTransformer)
             ->toArray();
     }
 
@@ -53,7 +66,7 @@ class TopicController extends Controller
 
         return fractal()
             ->item($topic)
-            ->parseIncludes(['user', 'posts', 'posts.user'])
+            ->parseIncludes(['user'])
             ->transformWith(new TopicTransformer)
             ->toArray();
     }
