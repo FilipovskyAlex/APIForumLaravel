@@ -7,6 +7,10 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
 
+/**
+ * Class User
+ * @package App
+ */
 class User extends Authenticatable
 {
     use Notifiable, HasApiTokens;
@@ -37,4 +41,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * @return string
+     */
+    public function avatar() : string
+    {
+        return "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $this->email ) ) )  . "&s=" . 45 . "&d=mm";
+    }
 }
