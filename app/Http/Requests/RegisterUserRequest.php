@@ -35,7 +35,7 @@ class RegisterUserRequest extends FormRequest
         return [
             'required' => 'I said this field is required!',
             'unique' => 'Ooops, i think that i already know this email',
-            'min' => 'Toooooo long, fella :('
+            'min' => 'Toooooo small, fella :('
         ];
     }
 }
