@@ -49,4 +49,13 @@ class User extends Authenticatable
     {
         return "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $this->email ) ) )  . "&s=" . 45 . "&d=mm";
     }
+
+    /**
+     * @param Topic $topic
+     * @return bool
+     */
+    public function onwsTopic(Topic $topic) : bool
+    {
+        return $this->id === $topic->user->id;
+    }
 }

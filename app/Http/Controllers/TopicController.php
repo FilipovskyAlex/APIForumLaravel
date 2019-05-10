@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTopicRequest;
+use App\Http\Requests\UpdateTopicRequest;
 use App\Post;
 use App\Topic;
 use App\Transformers\TopicTransformer;
+use Illuminate\Http\JsonResponse;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 /**
@@ -46,6 +48,27 @@ class TopicController extends Controller
     }
 
     /**
+     * @param UpdateTopicRequest $request
+     * @param Topic $topic
+     * @return array
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function update(UpdateTopicRequest $request, Topic $topic) : array
+    {
+        // Use policy to check user policies to update his own topic
+        $this->authorize('update', $topic);
+
+        $topic->title = $request->get('title', $topic->title);
+        $topic->save();
+
+        return fractal()
+            ->item($topic)
+            ->parseIncludes(['user'])
+            ->transformWith(new TopicTransformer)
+            ->toArray();
+    }
+
+    /**
      * @param StoreTopicRequest $request
      * @return array
      */
@@ -69,5 +92,20 @@ class TopicController extends Controller
             ->parseIncludes(['user'])
             ->transformWith(new TopicTransformer)
             ->toArray();
+    }
+
+    /**
+     * @param Topic $topic
+     * @return JsonResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function delete(Topic $topic) : JsonResponse
+    {
+        // Use policy to check user policies to delete his own topic
+        $this->authorize('delete', $topic);
+
+        $topic->delete();
+
+        return new JsonResponse(null, 204);
     }
 }
