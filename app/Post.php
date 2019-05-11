@@ -33,4 +33,9 @@ class Post extends Model
     {
         return $this->belongsTo(Topic::class)->newestFirst();
     }
+
+    public function likes()
+    {
+        return $this->morphMany(Like::class, 'likeable');
+    }
 }

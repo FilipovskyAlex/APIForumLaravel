@@ -33,4 +33,9 @@ class PostPolicy
     {
         return $user->onwsPost($post);
     }
+
+    public function like(User $user, Post $post) : bool
+    {
+        return !$user->onwsPost($post);
+    }
 }
