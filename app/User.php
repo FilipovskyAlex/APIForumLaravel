@@ -58,4 +58,13 @@ class User extends Authenticatable
     {
         return $this->id === $topic->user->id;
     }
+
+    /**
+     * @param Post $post
+     * @return bool
+     */
+    public function onwsPost(Post $post) : bool
+    {
+        return $this->id === $post->user->id;
+    }
 }
