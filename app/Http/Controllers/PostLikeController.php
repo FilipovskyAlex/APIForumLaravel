@@ -16,7 +16,9 @@ class PostLikeController extends Controller
 
         if($request->user()->hasLikedPost($post)) {
             return new JsonResponse([
-                'error' => 'Already liked'
+                'data' => [
+                    'error' => 'Already liked'
+                ]
             ], 409);
         }
 
